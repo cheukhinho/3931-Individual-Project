@@ -3,47 +3,6 @@
 A modular Python pipeline for modelling and simulating railway delay
 propagation using temporal graphs.
 
-## Architecture
-
-```
-RealTimeTrains API  (OAuth2 Bearer token — https://api-portal.rtt.io)
-       │
-       ▼
-config.py           ← load RTT_BEARER_TOKEN from .env
-       │
-       ▼
-data_ingestion.py   ← exchange refresh token for access token, fetch & parse JSON → pandas DataFrame
-       │
-       ▼
-data_processing.py  ← build services / stops / route_edges tables
-       │
-       ▼
-graph_construction.py  ← build temporal NetworkX DiGraph
-       │
-       ▼
-simulation.py       ← rule-based delay propagation
-       │
-       ├── disruption.py   ← inject synthetic disruption scenarios
-       │
-       └── optimisation.py ← greedy heuristic response selection
-                │
-                ▼
-         evaluation.py  ← metrics & visualisation
-```
-
-## Modules
-
-| Module | Description |
-|---|---|
-| `config` | Load `RTT_BEARER_TOKEN` from the `.env` file; expose `get_rtt_token()` |
-| `data_ingestion` | OAuth2 token exchange; fetch train service data from the RTT API; parse JSON into DataFrames |
-| `data_processing` | Transform raw stop data into `services`, `stops`, and `route_edges` tables |
-| `graph_construction` | Build a temporal directed graph (nodes = departure events, edges = movements + dependencies) |
-| `simulation` | Rule-based delay propagation: late arrival → late departure, turnaround constraints, connection dependencies |
-| `disruption` | Generate synthetic disruption scenarios (single-point, multi-point, station incident) |
-| `optimisation` | Greedy heuristic optimisation: evaluate `no_action`, `delay_departure`, `cancel_service`, `short_turn` |
-| `evaluation` | Compute metrics (total delay, propagation depth, affected services) and plot results |
-
 ## Installation
 
 ```bash
